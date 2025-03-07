@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Power BI Dashboard Rotator</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            background-color: #000;
+        }
+        iframe {
+            width: 100vw;
+            height: 100vh;
+            border: none;
+        }
+    </style>
+    <script>
+        let reports = [
+        "https://app.powerbi.com/reportEmbed?reportId=97989832-4cfb-43ba-bf1d-b3ff96a0c852&autoAuth=true&ctid=9340dabd-d2ed-45db-ae20-5a73190ddb71",
+        "https://app.powerbi.com/reportEmbed?reportId=04d81438-1ad4-4e06-ba1f-819c23d9c0c1&autoAuth=true&ctid=9340dabd-d2ed-45db-ae20-5a73190ddb71",
+        "https://app.powerbi.com/reportEmbed?reportId=8b041bc0-f3c1-43cd-9b2a-33059cf64d3b&autoAuth=true&ctid=9340dabd-d2ed-45db-ae20-5a73190ddb71"
+        ]; 
+        let currentIndex = 0;
+        let intervalTime = 25000; // 25 seconds per report
+        let refreshTime = 300000; // 5 minutes auto-refresh (300,000 ms)
+
+        // Function to rotate Power BI reports
+        function rotateReports() {
+            document.getElementById("powerbiFrame").src = reports[currentIndex];
+            currentIndex = (currentIndex + 1) % reports.length;
+        }
+
+        // Function to make the page go full-screen
+        function goFullScreen() {
+            let elem = document.documentElement;
+            if (elem.requestFullscreen) {
+                elem.requestFullscreen();
+            } else if (elem.mozRequestFullScreen) { // Firefox
+                elem.mozRequestFullScreen();
+            } else if (elem.webkitRequestFullscreen) { // Chrome, Safari
+                elem.webkitRequestFullscreen();
+            } else if (elem.msRequestFullscreen) { // IE/Edge
+                elem.msRequestFullscreen();
+            }
+        }
+
+        window.onload = function () {
+            rotateReports(); // Show first report
+            setInterval(rotateReports, intervalTime); // Rotate reports every 10 sec
+            setInterval(() => { location.reload(); }, refreshTime); // Auto-refresh every 5 min
+            setTimeout(goFullScreen, 3000); // Go fullscreen after 3 sec (allow page load)
+        };
+    </script>
+</head>
+<body>
+    <iframe id="powerbiFrame"></iframe>
+</body>
+</html>
